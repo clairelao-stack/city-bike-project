@@ -1,0 +1,1654 @@
+{
+  "solver": "Gurobi",
+  "status": "Time limit reached",
+  "runtime_seconds": 600.0355141162872,
+  "has_feasible_solution": true,
+  "gap": 0.42476102913240765,
+  "objective_bound": 480.076894282804,
+  "stations": 165,
+  "routing_stations": 165,
+  "trucks": 2,
+  "routes": {
+    "Truck_1": {
+      "path": [
+        "depot_Truck_1",
+        "6190.08",
+        "6107.08",
+        "5989.02",
+        "6182.02",
+        "6148.02",
+        "6072.11",
+        "6224.05",
+        "6339.06",
+        "6459.04",
+        "6416.06",
+        "6224.06",
+        "6257.03",
+        "6233.11",
+        "6233.04",
+        "6306.01",
+        "6266.06",
+        "6459.07",
+        "6578.01",
+        "6611.07",
+        "6611.02",
+        "6526.05",
+        "6569.07",
+        "6569.09",
+        "6492.08",
+        "6373.07",
+        "6331.01",
+        "6322.01",
+        "6280.13",
+        "6280.12",
+        "6248.08",
+        "6483.06",
+        "6602.03",
+        "6206.08",
+        "6013.12",
+        "5896.01",
+        "5971.08",
+        "5854.09",
+        "5779.08",
+        "5769.06",
+        "5929.07",
+        "6004.07",
+        "6004.06",
+        "6122.09",
+        "6230.04",
+        "6197.08",
+        "6079.03",
+        "6089.11",
+        "depot_Truck_1"
+      ],
+      "distance_km": 24.803,
+      "transfers": {
+        "5769.06": -12,
+        "5779.08": 12,
+        "5854.09": -2,
+        "5896.01": 20,
+        "5929.07": 0,
+        "5971.08": -8,
+        "5989.02": 18,
+        "6004.06": -5,
+        "6004.07": -4,
+        "6013.12": -5,
+        "6072.11": 4,
+        "6079.03": -8,
+        "6089.11": 22,
+        "6107.08": 7,
+        "6122.09": 21,
+        "6148.02": -12,
+        "6182.02": -2,
+        "6190.08": -25,
+        "6197.08": 11,
+        "6206.08": 8,
+        "6224.05": 7,
+        "6224.06": 8,
+        "6230.04": -25,
+        "6233.04": 9,
+        "6233.11": -11,
+        "6248.08": -1,
+        "6257.03": 10,
+        "6266.06": 15,
+        "6280.12": 6,
+        "6280.13": 7,
+        "6306.01": -12,
+        "6322.01": -2,
+        "6331.01": 12,
+        "6339.06": -3,
+        "6373.07": 1,
+        "6416.06": -6,
+        "6459.04": -7,
+        "6459.07": -3,
+        "6483.06": 1,
+        "6492.08": -1,
+        "6526.05": 13,
+        "6569.07": -8,
+        "6569.09": -3,
+        "6578.01": -3,
+        "6602.03": -25,
+        "6611.02": -15,
+        "6611.07": -4
+      },
+      "loads": {
+        "5769.06": 12.0,
+        "5779.08": 0.0,
+        "5854.09": 12.0,
+        "5896.01": 2.0,
+        "5929.07": 12.0,
+        "5971.08": 10.0,
+        "5989.02": 0.0,
+        "6004.06": 21.0,
+        "6004.07": 16.0,
+        "6013.12": 22.0,
+        "6072.11": 10.0,
+        "6079.03": 22.0,
+        "6089.11": 0.0,
+        "6107.08": 18.0,
+        "6122.09": 0.0,
+        "6148.02": 14.0,
+        "6182.02": 2.0,
+        "6190.08": 25.0,
+        "6197.08": 14.0,
+        "6206.08": 17.0,
+        "6224.05": 3.0,
+        "6224.06": 11.0,
+        "6230.04": 25.0,
+        "6233.04": 3.0,
+        "6233.11": 12.0,
+        "6248.08": 1.0,
+        "6257.03": 1.0,
+        "6266.06": 0.0,
+        "6280.12": 0.0,
+        "6280.13": 6.0,
+        "6306.01": 15.0,
+        "6322.01": 13.0,
+        "6331.01": 11.0,
+        "6339.06": 6.0,
+        "6373.07": 23.0,
+        "6416.06": 19.0,
+        "6459.04": 13.0,
+        "6459.07": 3.0,
+        "6483.06": 0.0,
+        "6492.08": 24.0,
+        "6526.05": 12.0,
+        "6569.07": 20.0,
+        "6569.09": 23.0,
+        "6578.01": 6.0,
+        "6602.03": 25.0,
+        "6611.02": 25.0,
+        "6611.07": 10.0
+      }
+    },
+    "Truck_2": {
+      "path": [
+        "depot_Truck_2",
+        "6708.04",
+        "6816.07",
+        "6747.07",
+        "6786.02",
+        "6747.06",
+        "7023.04",
+        "6920.05",
+        "6955.01",
+        "6955.05",
+        "6926.01",
+        "6890.06",
+        "6824.07",
+        "6756.01",
+        "6717.01",
+        "6676.02",
+        "6602.05",
+        "6364.07",
+        "6364.10",
+        "6441.06",
+        "6560.15",
+        "6560.14",
+        "6644.04",
+        "6450.12",
+        "6257.06",
+        "6297.07",
+        "6289.06",
+        "6131.12",
+        "6131.13",
+        "5938.01",
+        "5971.09",
+        "6046.02",
+        "6089.08",
+        "6197.11",
+        "6422.09",
+        "6498.10",
+        "6422.08",
+        "6230.02",
+        "6541.03",
+        "6608.09",
+        "6682.03",
+        "6691.11",
+        "6617.02",
+        "6659.09",
+        "6626.01",
+        "6551.16",
+        "6432.15",
+        "6313.10",
+        "6239.08",
+        "depot_Truck_2"
+      ],
+      "distance_km": 24.91,
+      "transfers": {
+        "5938.01": 15,
+        "5971.09": 10,
+        "6046.02": -7,
+        "6089.08": -6,
+        "6131.12": -2,
+        "6131.13": -1,
+        "6197.11": 13,
+        "6230.02": 11,
+        "6239.08": 25,
+        "6257.06": 5,
+        "6289.06": 2,
+        "6297.07": -15,
+        "6313.10": 0,
+        "6364.07": 12,
+        "6364.10": 13,
+        "6422.08": 1,
+        "6422.09": -5,
+        "6432.15": 0,
+        "6441.06": -1,
+        "6450.12": 10,
+        "6498.10": -8,
+        "6541.03": -1,
+        "6551.16": -1,
+        "6560.14": -1,
+        "6560.15": 1,
+        "6602.05": -22,
+        "6608.09": -10,
+        "6617.02": -2,
+        "6626.01": -1,
+        "6644.04": -23,
+        "6659.09": -1,
+        "6676.02": 2,
+        "6682.03": -6,
+        "6691.11": -2,
+        "6708.04": -4,
+        "6717.01": -3,
+        "6747.06": -5,
+        "6747.07": 2,
+        "6756.01": -2,
+        "6786.02": -13,
+        "6816.07": -5,
+        "6824.07": 1,
+        "6890.06": -1,
+        "6920.05": -7,
+        "6926.01": 7,
+        "6955.01": 4,
+        "6955.05": 11,
+        "7023.04": 10
+      },
+      "loads": {
+        "5938.01": 10.0,
+        "5971.09": 0.0,
+        "6046.02": 7.0,
+        "6089.08": 13.0,
+        "6131.12": 24.0,
+        "6131.13": 25.0,
+        "6197.11": 0.0,
+        "6230.02": 1.0,
+        "6239.08": 0.0,
+        "6257.06": 9.0,
+        "6289.06": 22.0,
+        "6297.07": 24.0,
+        "6313.10": 25.0,
+        "6364.07": 13.0,
+        "6364.10": 0.0,
+        "6422.08": 12.0,
+        "6422.09": 5.0,
+        "6432.15": 25.0,
+        "6441.06": 1.0,
+        "6450.12": 14.0,
+        "6498.10": 13.0,
+        "6541.03": 2.0,
+        "6551.16": 25.0,
+        "6560.14": 1.0,
+        "6560.15": 0.0,
+        "6602.05": 25.0,
+        "6608.09": 12.0,
+        "6617.02": 22.0,
+        "6626.01": 24.0,
+        "6644.04": 24.0,
+        "6659.09": 23.0,
+        "6676.02": 3.0,
+        "6682.03": 18.0,
+        "6691.11": 20.0,
+        "6708.04": 4.0,
+        "6717.01": 5.0,
+        "6747.06": 25.0,
+        "6747.07": 7.0,
+        "6756.01": 2.0,
+        "6786.02": 20.0,
+        "6816.07": 9.0,
+        "6824.07": 0.0,
+        "6890.06": 1.0,
+        "6920.05": 22.0,
+        "6926.01": 0.0,
+        "6955.01": 18.0,
+        "6955.05": 7.0,
+        "7023.04": 15.0
+      }
+    }
+  },
+  "station_results": [
+    {
+      "id": "5736.09",
+      "I0": 41,
+      "net_delivery": 0,
+      "final_inventory": 41,
+      "target": 41,
+      "mismatch": 0
+    },
+    {
+      "id": "5769.06",
+      "I0": 45,
+      "net_delivery": -12,
+      "final_inventory": 33,
+      "target": 33,
+      "mismatch": 0
+    },
+    {
+      "id": "5779.08",
+      "I0": 35,
+      "net_delivery": 12,
+      "final_inventory": 47,
+      "target": 51,
+      "mismatch": 4
+    },
+    {
+      "id": "5854.09",
+      "I0": 51,
+      "net_delivery": -2,
+      "final_inventory": 49,
+      "target": 49,
+      "mismatch": 0
+    },
+    {
+      "id": "5863.07",
+      "I0": 2,
+      "net_delivery": 0,
+      "final_inventory": 2,
+      "target": 13,
+      "mismatch": 11
+    },
+    {
+      "id": "5896.01",
+      "I0": 12,
+      "net_delivery": 20,
+      "final_inventory": 32,
+      "target": 32,
+      "mismatch": 0
+    },
+    {
+      "id": "5929.01",
+      "I0": 22,
+      "net_delivery": 0,
+      "final_inventory": 22,
+      "target": 26,
+      "mismatch": 4
+    },
+    {
+      "id": "5929.07",
+      "I0": 27,
+      "net_delivery": 0,
+      "final_inventory": 27,
+      "target": 27,
+      "mismatch": 0
+    },
+    {
+      "id": "5938.01",
+      "I0": 0,
+      "net_delivery": 15,
+      "final_inventory": 15,
+      "target": 15,
+      "mismatch": 0
+    },
+    {
+      "id": "5938.11",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 2,
+      "mismatch": 2
+    },
+    {
+      "id": "5947.06",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 2,
+      "mismatch": 2
+    },
+    {
+      "id": "5971.08",
+      "I0": 53,
+      "net_delivery": -8,
+      "final_inventory": 45,
+      "target": 45,
+      "mismatch": 0
+    },
+    {
+      "id": "5971.09",
+      "I0": 24,
+      "net_delivery": 10,
+      "final_inventory": 34,
+      "target": 34,
+      "mismatch": 0
+    },
+    {
+      "id": "5980.10",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "5980.11",
+      "I0": 1,
+      "net_delivery": 0,
+      "final_inventory": 1,
+      "target": 0,
+      "mismatch": 1
+    },
+    {
+      "id": "5989.02",
+      "I0": 0,
+      "net_delivery": 18,
+      "final_inventory": 18,
+      "target": 20,
+      "mismatch": 2
+    },
+    {
+      "id": "6004.06",
+      "I0": 5,
+      "net_delivery": -5,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6004.07",
+      "I0": 17,
+      "net_delivery": -4,
+      "final_inventory": 13,
+      "target": 13,
+      "mismatch": 0
+    },
+    {
+      "id": "6013.12",
+      "I0": 12,
+      "net_delivery": -5,
+      "final_inventory": 7,
+      "target": 7,
+      "mismatch": 0
+    },
+    {
+      "id": "6022.04",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6046.02",
+      "I0": 38,
+      "net_delivery": -7,
+      "final_inventory": 31,
+      "target": 31,
+      "mismatch": 0
+    },
+    {
+      "id": "6055.08",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 1,
+      "mismatch": 1
+    },
+    {
+      "id": "6064.08",
+      "I0": 1,
+      "net_delivery": 0,
+      "final_inventory": 1,
+      "target": 0,
+      "mismatch": 1
+    },
+    {
+      "id": "6072.11",
+      "I0": 4,
+      "net_delivery": 4,
+      "final_inventory": 8,
+      "target": 8,
+      "mismatch": 0
+    },
+    {
+      "id": "6079.03",
+      "I0": 8,
+      "net_delivery": -8,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6089.07",
+      "I0": 4,
+      "net_delivery": 0,
+      "final_inventory": 4,
+      "target": 7,
+      "mismatch": 3
+    },
+    {
+      "id": "6089.08",
+      "I0": 14,
+      "net_delivery": -6,
+      "final_inventory": 8,
+      "target": 8,
+      "mismatch": 0
+    },
+    {
+      "id": "6089.11",
+      "I0": 3,
+      "net_delivery": 22,
+      "final_inventory": 25,
+      "target": 30,
+      "mismatch": 5
+    },
+    {
+      "id": "6098.02",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6107.08",
+      "I0": 4,
+      "net_delivery": 7,
+      "final_inventory": 11,
+      "target": 11,
+      "mismatch": 0
+    },
+    {
+      "id": "6122.09",
+      "I0": 11,
+      "net_delivery": 21,
+      "final_inventory": 32,
+      "target": 37,
+      "mismatch": 5
+    },
+    {
+      "id": "6131.1",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6131.12",
+      "I0": 2,
+      "net_delivery": -2,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6131.13",
+      "I0": 1,
+      "net_delivery": -1,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6140.05",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 2,
+      "mismatch": 2
+    },
+    {
+      "id": "6148.02",
+      "I0": 20,
+      "net_delivery": -12,
+      "final_inventory": 8,
+      "target": 8,
+      "mismatch": 0
+    },
+    {
+      "id": "6164.09",
+      "I0": 6,
+      "net_delivery": 0,
+      "final_inventory": 6,
+      "target": 9,
+      "mismatch": 3
+    },
+    {
+      "id": "6173.08",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6182.02",
+      "I0": 13,
+      "net_delivery": -2,
+      "final_inventory": 11,
+      "target": 11,
+      "mismatch": 0
+    },
+    {
+      "id": "6190.08",
+      "I0": 50,
+      "net_delivery": -25,
+      "final_inventory": 25,
+      "target": 8,
+      "mismatch": 17
+    },
+    {
+      "id": "6197.08",
+      "I0": 15,
+      "net_delivery": 11,
+      "final_inventory": 26,
+      "target": 26,
+      "mismatch": 0
+    },
+    {
+      "id": "6197.11",
+      "I0": 10,
+      "net_delivery": 13,
+      "final_inventory": 23,
+      "target": 23,
+      "mismatch": 0
+    },
+    {
+      "id": "6206.08",
+      "I0": 0,
+      "net_delivery": 8,
+      "final_inventory": 8,
+      "target": 8,
+      "mismatch": 0
+    },
+    {
+      "id": "6215.04",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 1,
+      "mismatch": 1
+    },
+    {
+      "id": "6215.07",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 1,
+      "mismatch": 1
+    },
+    {
+      "id": "6224.03",
+      "I0": 42,
+      "net_delivery": 0,
+      "final_inventory": 42,
+      "target": 43,
+      "mismatch": 1
+    },
+    {
+      "id": "6224.05",
+      "I0": 36,
+      "net_delivery": 7,
+      "final_inventory": 43,
+      "target": 43,
+      "mismatch": 0
+    },
+    {
+      "id": "6224.06",
+      "I0": 15,
+      "net_delivery": 8,
+      "final_inventory": 23,
+      "target": 23,
+      "mismatch": 0
+    },
+    {
+      "id": "6230.02",
+      "I0": 17,
+      "net_delivery": 11,
+      "final_inventory": 28,
+      "target": 28,
+      "mismatch": 0
+    },
+    {
+      "id": "6230.04",
+      "I0": 99,
+      "net_delivery": -25,
+      "final_inventory": 74,
+      "target": 74,
+      "mismatch": 0
+    },
+    {
+      "id": "6233.04",
+      "I0": 0,
+      "net_delivery": 9,
+      "final_inventory": 9,
+      "target": 9,
+      "mismatch": 0
+    },
+    {
+      "id": "6233.11",
+      "I0": 11,
+      "net_delivery": -11,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6239.08",
+      "I0": 6,
+      "net_delivery": 25,
+      "final_inventory": 31,
+      "target": 44,
+      "mismatch": 13
+    },
+    {
+      "id": "6248.08",
+      "I0": 1,
+      "net_delivery": -1,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6257.03",
+      "I0": 3,
+      "net_delivery": 10,
+      "final_inventory": 13,
+      "target": 13,
+      "mismatch": 0
+    },
+    {
+      "id": "6257.06",
+      "I0": 0,
+      "net_delivery": 5,
+      "final_inventory": 5,
+      "target": 5,
+      "mismatch": 0
+    },
+    {
+      "id": "6266.06",
+      "I0": 41,
+      "net_delivery": 15,
+      "final_inventory": 56,
+      "target": 56,
+      "mismatch": 0
+    },
+    {
+      "id": "6280.12",
+      "I0": 0,
+      "net_delivery": 6,
+      "final_inventory": 6,
+      "target": 6,
+      "mismatch": 0
+    },
+    {
+      "id": "6280.13",
+      "I0": 0,
+      "net_delivery": 7,
+      "final_inventory": 7,
+      "target": 7,
+      "mismatch": 0
+    },
+    {
+      "id": "6289.06",
+      "I0": 0,
+      "net_delivery": 2,
+      "final_inventory": 2,
+      "target": 2,
+      "mismatch": 0
+    },
+    {
+      "id": "6297.07",
+      "I0": 28,
+      "net_delivery": -15,
+      "final_inventory": 13,
+      "target": 13,
+      "mismatch": 0
+    },
+    {
+      "id": "6306.01",
+      "I0": 17,
+      "net_delivery": -12,
+      "final_inventory": 5,
+      "target": 5,
+      "mismatch": 0
+    },
+    {
+      "id": "6306.06",
+      "I0": 14,
+      "net_delivery": 0,
+      "final_inventory": 14,
+      "target": 15,
+      "mismatch": 1
+    },
+    {
+      "id": "6313.10",
+      "I0": 7,
+      "net_delivery": 0,
+      "final_inventory": 7,
+      "target": 10,
+      "mismatch": 3
+    },
+    {
+      "id": "6322.01",
+      "I0": 2,
+      "net_delivery": -2,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6331.01",
+      "I0": 2,
+      "net_delivery": 12,
+      "final_inventory": 14,
+      "target": 14,
+      "mismatch": 0
+    },
+    {
+      "id": "6339.06",
+      "I0": 35,
+      "net_delivery": -3,
+      "final_inventory": 32,
+      "target": 32,
+      "mismatch": 0
+    },
+    {
+      "id": "6364.07",
+      "I0": 1,
+      "net_delivery": 12,
+      "final_inventory": 13,
+      "target": 13,
+      "mismatch": 0
+    },
+    {
+      "id": "6364.10",
+      "I0": 0,
+      "net_delivery": 13,
+      "final_inventory": 13,
+      "target": 14,
+      "mismatch": 1
+    },
+    {
+      "id": "6373.07",
+      "I0": 5,
+      "net_delivery": 1,
+      "final_inventory": 6,
+      "target": 6,
+      "mismatch": 0
+    },
+    {
+      "id": "6389.09",
+      "I0": 4,
+      "net_delivery": 0,
+      "final_inventory": 4,
+      "target": 6,
+      "mismatch": 2
+    },
+    {
+      "id": "6398.06",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6398.08",
+      "I0": 1,
+      "net_delivery": 0,
+      "final_inventory": 1,
+      "target": 3,
+      "mismatch": 2
+    },
+    {
+      "id": "6416.06",
+      "I0": 9,
+      "net_delivery": -6,
+      "final_inventory": 3,
+      "target": 3,
+      "mismatch": 0
+    },
+    {
+      "id": "6422.08",
+      "I0": 4,
+      "net_delivery": 1,
+      "final_inventory": 5,
+      "target": 5,
+      "mismatch": 0
+    },
+    {
+      "id": "6422.09",
+      "I0": 5,
+      "net_delivery": -5,
+      "final_inventory": 0,
+      "target": 1,
+      "mismatch": 1
+    },
+    {
+      "id": "6425.04",
+      "I0": 2,
+      "net_delivery": 0,
+      "final_inventory": 2,
+      "target": 0,
+      "mismatch": 2
+    },
+    {
+      "id": "6432.08",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6432.09",
+      "I0": 1,
+      "net_delivery": 0,
+      "final_inventory": 1,
+      "target": 2,
+      "mismatch": 1
+    },
+    {
+      "id": "6432.11",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 1,
+      "mismatch": 1
+    },
+    {
+      "id": "6432.15",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6441.02",
+      "I0": 1,
+      "net_delivery": 0,
+      "final_inventory": 1,
+      "target": 1,
+      "mismatch": 0
+    },
+    {
+      "id": "6441.06",
+      "I0": 1,
+      "net_delivery": -1,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6441.11",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 1,
+      "mismatch": 1
+    },
+    {
+      "id": "6450.05",
+      "I0": 8,
+      "net_delivery": 0,
+      "final_inventory": 8,
+      "target": 8,
+      "mismatch": 0
+    },
+    {
+      "id": "6450.12",
+      "I0": 1,
+      "net_delivery": 10,
+      "final_inventory": 11,
+      "target": 11,
+      "mismatch": 0
+    },
+    {
+      "id": "6459.04",
+      "I0": 12,
+      "net_delivery": -7,
+      "final_inventory": 5,
+      "target": 5,
+      "mismatch": 0
+    },
+    {
+      "id": "6459.07",
+      "I0": 8,
+      "net_delivery": -3,
+      "final_inventory": 5,
+      "target": 5,
+      "mismatch": 0
+    },
+    {
+      "id": "6464.08",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6464.09",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6474.11",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6483.06",
+      "I0": 1,
+      "net_delivery": 1,
+      "final_inventory": 2,
+      "target": 2,
+      "mismatch": 0
+    },
+    {
+      "id": "6492.04",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6492.08",
+      "I0": 2,
+      "net_delivery": -1,
+      "final_inventory": 1,
+      "target": 1,
+      "mismatch": 0
+    },
+    {
+      "id": "6498.10",
+      "I0": 12,
+      "net_delivery": -8,
+      "final_inventory": 4,
+      "target": 4,
+      "mismatch": 0
+    },
+    {
+      "id": "6517.08",
+      "I0": 1,
+      "net_delivery": 0,
+      "final_inventory": 1,
+      "target": 0,
+      "mismatch": 1
+    },
+    {
+      "id": "6526.01",
+      "I0": 3,
+      "net_delivery": 0,
+      "final_inventory": 3,
+      "target": 3,
+      "mismatch": 0
+    },
+    {
+      "id": "6526.05",
+      "I0": 5,
+      "net_delivery": 13,
+      "final_inventory": 18,
+      "target": 18,
+      "mismatch": 0
+    },
+    {
+      "id": "6535.04",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6535.05",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6541.03",
+      "I0": 1,
+      "net_delivery": -1,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6551.02",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6551.16",
+      "I0": 1,
+      "net_delivery": -1,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6560.01",
+      "I0": 1,
+      "net_delivery": 0,
+      "final_inventory": 1,
+      "target": 1,
+      "mismatch": 0
+    },
+    {
+      "id": "6560.14",
+      "I0": 1,
+      "net_delivery": -1,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6560.15",
+      "I0": 0,
+      "net_delivery": 1,
+      "final_inventory": 1,
+      "target": 1,
+      "mismatch": 0
+    },
+    {
+      "id": "6569.07",
+      "I0": 13,
+      "net_delivery": -8,
+      "final_inventory": 5,
+      "target": 5,
+      "mismatch": 0
+    },
+    {
+      "id": "6569.09",
+      "I0": 5,
+      "net_delivery": -3,
+      "final_inventory": 2,
+      "target": 2,
+      "mismatch": 0
+    },
+    {
+      "id": "6578.01",
+      "I0": 3,
+      "net_delivery": -3,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6584.12",
+      "I0": 1,
+      "net_delivery": 0,
+      "final_inventory": 1,
+      "target": 0,
+      "mismatch": 1
+    },
+    {
+      "id": "6593.14",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6602.03",
+      "I0": 62,
+      "net_delivery": -25,
+      "final_inventory": 37,
+      "target": 11,
+      "mismatch": 26
+    },
+    {
+      "id": "6602.05",
+      "I0": 26,
+      "net_delivery": -22,
+      "final_inventory": 4,
+      "target": 4,
+      "mismatch": 0
+    },
+    {
+      "id": "6608.09",
+      "I0": 24,
+      "net_delivery": -10,
+      "final_inventory": 14,
+      "target": 14,
+      "mismatch": 0
+    },
+    {
+      "id": "6611.02",
+      "I0": 32,
+      "net_delivery": -15,
+      "final_inventory": 17,
+      "target": 17,
+      "mismatch": 0
+    },
+    {
+      "id": "6611.07",
+      "I0": 6,
+      "net_delivery": -4,
+      "final_inventory": 2,
+      "target": 2,
+      "mismatch": 0
+    },
+    {
+      "id": "6617.02",
+      "I0": 2,
+      "net_delivery": -2,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6617.09",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6626.01",
+      "I0": 1,
+      "net_delivery": -1,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6626.11",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6644.04",
+      "I0": 37,
+      "net_delivery": -23,
+      "final_inventory": 14,
+      "target": 14,
+      "mismatch": 0
+    },
+    {
+      "id": "6644.07",
+      "I0": 23,
+      "net_delivery": 0,
+      "final_inventory": 23,
+      "target": 20,
+      "mismatch": 3
+    },
+    {
+      "id": "6650.07",
+      "I0": 3,
+      "net_delivery": 0,
+      "final_inventory": 3,
+      "target": 4,
+      "mismatch": 1
+    },
+    {
+      "id": "6659.09",
+      "I0": 1,
+      "net_delivery": -1,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6659.10",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6667.12",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6676.02",
+      "I0": 16,
+      "net_delivery": 2,
+      "final_inventory": 18,
+      "target": 18,
+      "mismatch": 0
+    },
+    {
+      "id": "6682.03",
+      "I0": 15,
+      "net_delivery": -6,
+      "final_inventory": 9,
+      "target": 9,
+      "mismatch": 0
+    },
+    {
+      "id": "6691.11",
+      "I0": 2,
+      "net_delivery": -2,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6700.01",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6700.14",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6708.04",
+      "I0": 4,
+      "net_delivery": -4,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6717.01",
+      "I0": 25,
+      "net_delivery": -3,
+      "final_inventory": 22,
+      "target": 22,
+      "mismatch": 0
+    },
+    {
+      "id": "6726.01",
+      "I0": 51,
+      "net_delivery": 0,
+      "final_inventory": 51,
+      "target": 50,
+      "mismatch": 1
+    },
+    {
+      "id": "6732.01",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6740.01",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6740.10",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6747.06",
+      "I0": 8,
+      "net_delivery": -5,
+      "final_inventory": 3,
+      "target": 3,
+      "mismatch": 0
+    },
+    {
+      "id": "6747.07",
+      "I0": 0,
+      "net_delivery": 2,
+      "final_inventory": 2,
+      "target": 2,
+      "mismatch": 0
+    },
+    {
+      "id": "6756.01",
+      "I0": 110,
+      "net_delivery": -2,
+      "final_inventory": 108,
+      "target": 108,
+      "mismatch": 0
+    },
+    {
+      "id": "6756.05",
+      "I0": 74,
+      "net_delivery": 0,
+      "final_inventory": 74,
+      "target": 73,
+      "mismatch": 1
+    },
+    {
+      "id": "6762.02",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6765.01",
+      "I0": 64,
+      "net_delivery": 0,
+      "final_inventory": 64,
+      "target": 53,
+      "mismatch": 11
+    },
+    {
+      "id": "6771.13",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6779.05",
+      "I0": 4,
+      "net_delivery": 0,
+      "final_inventory": 4,
+      "target": 0,
+      "mismatch": 4
+    },
+    {
+      "id": "6786.02",
+      "I0": 49,
+      "net_delivery": -13,
+      "final_inventory": 36,
+      "target": 36,
+      "mismatch": 0
+    },
+    {
+      "id": "6795.01",
+      "I0": 22,
+      "net_delivery": 0,
+      "final_inventory": 22,
+      "target": 18,
+      "mismatch": 4
+    },
+    {
+      "id": "6809.07",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6809.09",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6816.07",
+      "I0": 6,
+      "net_delivery": -5,
+      "final_inventory": 1,
+      "target": 1,
+      "mismatch": 0
+    },
+    {
+      "id": "6824.07",
+      "I0": 32,
+      "net_delivery": 1,
+      "final_inventory": 33,
+      "target": 33,
+      "mismatch": 0
+    },
+    {
+      "id": "6839.04",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6847.05",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 0,
+      "mismatch": 0
+    },
+    {
+      "id": "6884.03",
+      "I0": 0,
+      "net_delivery": 0,
+      "final_inventory": 0,
+      "target": 1,
+      "mismatch": 1
+    },
+    {
+      "id": "6884.06",
+      "I0": 3,
+      "net_delivery": 0,
+      "final_inventory": 3,
+      "target": 4,
+      "mismatch": 1
+    },
+    {
+      "id": "6890.01",
+      "I0": 24,
+      "net_delivery": 0,
+      "final_inventory": 24,
+      "target": 24,
+      "mismatch": 0
+    },
+    {
+      "id": "6890.06",
+      "I0": 44,
+      "net_delivery": -1,
+      "final_inventory": 43,
+      "target": 43,
+      "mismatch": 0
+    },
+    {
+      "id": "6912.01",
+      "I0": 1,
+      "net_delivery": 0,
+      "final_inventory": 1,
+      "target": 0,
+      "mismatch": 1
+    },
+    {
+      "id": "6920.05",
+      "I0": 25,
+      "net_delivery": -7,
+      "final_inventory": 18,
+      "target": 18,
+      "mismatch": 0
+    },
+    {
+      "id": "6926.01",
+      "I0": 16,
+      "net_delivery": 7,
+      "final_inventory": 23,
+      "target": 23,
+      "mismatch": 0
+    },
+    {
+      "id": "6948.10",
+      "I0": 2,
+      "net_delivery": 0,
+      "final_inventory": 2,
+      "target": 1,
+      "mismatch": 1
+    },
+    {
+      "id": "6955.01",
+      "I0": 22,
+      "net_delivery": 4,
+      "final_inventory": 26,
+      "target": 26,
+      "mismatch": 0
+    },
+    {
+      "id": "6955.05",
+      "I0": 27,
+      "net_delivery": 11,
+      "final_inventory": 38,
+      "target": 38,
+      "mismatch": 0
+    },
+    {
+      "id": "7023.04",
+      "I0": 46,
+      "net_delivery": 10,
+      "final_inventory": 56,
+      "target": 56,
+      "mismatch": 0
+    },
+    {
+      "id": "7059.01",
+      "I0": 29,
+      "net_delivery": 0,
+      "final_inventory": 29,
+      "target": 28,
+      "mismatch": 1
+    }
+  ],
+  "total_distance_km": 49.713,
+  "total_mismatch": 152,
+  "objective": 834.5695000000001,
+  "baseline_mismatch": 884,
+  "baseline_objective": 4420,
+  "parameters": {
+    "truck_capacity": 25,
+    "max_distance": 25.0,
+    "time_limit": 600.0,
+    "alpha": 1.5,
+    "beta": 5
+  }
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "truck_id": "Truck_1",
+    "depot_id": "depot_Truck_1",
+    "name": "Depot 1 (candidate near Broadway & W 25 St)",
+    "lat": 40.74286877312112,
+    "lon": -73.98918628692627,
+    "candidate_station_id": "6173.08",
+    "nearest_station_count": 81,
+    "site_feasibility_verified": false
+  },
+  {
+    "truck_id": "Truck_2",
+    "depot_id": "depot_Truck_2",
+    "name": "Depot 2 (candidate near W 47 St & 6 Ave)",
+    "lat": 40.758154,
+    "lon": -73.981957,
+    "candidate_station_id": "6667.12",
+    "nearest_station_count": 84,
+    "site_feasibility_verified": false
+  }
+]

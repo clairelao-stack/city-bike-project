@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.DS_Store
+.venv/
+venv/
+*.lic
+gurobi.lic
+.env
+.env.*
+results*/
+prepared_start/
+*.log
+*.mps
+*.lp
+*.sol
+*.mst
