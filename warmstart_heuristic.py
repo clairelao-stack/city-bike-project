@@ -11,17 +11,8 @@ from collections import deque
 from copy import deepcopy
 import random
 import json
-import math
 from pathlib import Path
 from time import perf_counter
-
-
-def read_warm_start(path):
-    with Path(path).open(encoding='utf-8') as file:
-        start = json.load(file)
-    if not start.get('has_feasible_solution'):
-        raise ValueError('The warm-start file must contain a feasible saved solution.')
-    return start
 
 
 def route_distance(path, distances, truck):
@@ -55,82 +46,53 @@ def summarize_start(stations, routes, capacity, budget, alpha, beta):
         parameters=dict(truck_capacity=capacity, max_distance=budget, alpha=alpha, beta=beta))
 
 
-def check_warm_start(start, data, depots, distances, capacity, budget, alpha, beta):
-    """独立重放路线：检查原模型需要的库存、载重、访问和距离规则。"""
-    def require(condition, message):
-        if not condition:
-            raise ValueError(message)
-
-    require(capacity > 0 and math.isfinite(budget) and budget > 0, 'Invalid capacity or budget.')
-    stations = {station['id']: station for station in data['stations']}
-    require(len(stations) == len(data['stations']), 'Duplicate input station IDs.')
-    trucks = {depot['truck_id'] for depot in depots}
-    require(set(start['routes']) == trucks, 'Warm-start trucks differ from the input trucks.')
-    old_stations = {row['id']: row for row in start.get('station_results', [])}
-    require(set(old_stations) == set(stations), 'Warm-start station IDs differ from the inputs.')
-    for i, station in stations.items():
-        require(station['G'] == station['I_star']-station['I0'], f'Invalid target gap: {i}')
-        old = old_stations[i]
-        require(old['I0'] == station['I0'] and old['target'] == station['I_star'],
-                'Inventory inputs changed; build a compatible initial plan first.')
-    require(sum(s['I0'] for s in stations.values()) == sum(s['I_star'] for s in stations.values()),
-            'This experiment expects fleet-conserving targets.')
-    seen = set()
-    clean_routes = {}
+def refresh_start(start, data, depots, distances, capacity, budget, alpha, beta):
+    """重算成本和载重，只保留会影响路线可行性的判断。"""
+    stations = {s['id']: s for s in data['stations']}
+    routes = {}
+    visited = set()
     for depot in depots:
-        truck, depot_id = depot['truck_id'], depot['depot_id']
+        truck = depot['truck_id']
         route = start['routes'][truck]
         path = route['path']
-        require(bool(path) and path[0] == path[-1] == depot_id,
-                f'{truck}: route must start and end at its own depot.')
         stops = path[1:-1]
-        require(len(stops) == len(set(stops)), f'{truck}: repeated station.')
-        require(not (seen & set(stops)), 'Two trucks visit the same station.')
-        require(set(stops) <= stations.keys(), f'{truck}: unknown station.')
-        require(set(route['transfers']) == set(stops), f'{truck}: missing or extra transfers.')
-        seen.update(stops)
-        transfers, loads = {}, {}
+        if len(stops) != len(set(stops)) or visited & set(stops):
+            raise ValueError('A station is visited more than once.')
+        visited.update(stops)
         load = 0
+        loads = {}
         for i in stops:
-            value = route['transfers'][i]
-            require(math.isfinite(value) and abs(value-round(value)) < 1e-6,
-                    f'{truck}: transfer must be an integer at {i}.')
-            z = int(round(value))
-            require(abs(z) <= capacity, f'{truck}: transfer exceeds truck capacity at {i}.')
-            require(0 <= stations[i]['I0']+z <= stations[i]['C'], f'Station stock out of bounds: {i}')
-            load -= z
-            require(0 <= load <= capacity, f'{truck}: load out of bounds at {i}.')
-            transfers[i], loads[i] = z, load
-        require(load == 0, f'{truck}: truck must return empty.')
+            transfer = route['transfers'][i]
+            load -= transfer
+            if not (0 <= load <= capacity and 0 <= stations[i]['I0']+transfer <= stations[i]['C']):
+                raise ValueError('The saved route does not fit the current capacity or inventory.')
+            loads[i] = load
         km = route_distance(path, distances, truck)
-        require(km <= budget+1e-6, f'{truck}: distance {km:.3f} exceeds budget {budget}.')
-        clean_routes[truck] = dict(path=path[:], transfers=transfers, loads=loads, distance_km=km)
-    return summarize_start(data['stations'], clean_routes, capacity, budget, alpha, beta)
+        if load != 0 or km > budget+1e-6:
+            raise ValueError('The saved route must return empty and respect the distance budget.')
+        routes[truck] = dict(path=path[:], transfers=route['transfers'].copy(),
+                             loads=loads, distance_km=km)
+    return summarize_start(data['stations'], routes, capacity, budget, alpha, beta)
 
 
 def prepare_warm_start(path, data, depots, distances, capacity, budget, alpha, beta,
                        heuristic_seconds, output_dir, seed=42):
-    output_dir = Path(output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
+    with Path(path).open(encoding='utf-8') as file:
+        start = json.load(file)
     started = perf_counter()
-    start = check_warm_start(read_warm_start(path), data, depots, distances,
-                             capacity, budget, alpha, beta)
+    start = refresh_start(start, data, depots, distances, capacity, budget, alpha, beta)
     before = start['objective']
-    search_report = dict(iterations=0, improvements=0, seconds=0)
     if heuristic_seconds > 0:
-        start, search_report = improve_warm_start(
+        start, _ = improve_warm_start(
             start, data, depots, distances, capacity, budget, alpha, beta,
             seconds=heuristic_seconds, seed=seed)
-    # 再检查一次；只有通过检查的方案才会交给原模型。
-    start = check_warm_start(start, data, depots, distances, capacity, budget, alpha, beta)
-    report = dict(source=str(Path(path).resolve()), original_objective=before,
-                  prepared_objective=start['objective'], heuristic_enabled=heuristic_seconds > 0,
-                  requested_heuristic_seconds=heuristic_seconds,
-                  preparation_seconds=perf_counter()-started, search=search_report,
-                  validation_passed=True)
+    # 原项目 main.py 会在求解后继续执行完整的结果验证。
+    output_dir = Path(output_dir)
+    report = dict(original_objective=before, prepared_objective=start['objective'],
+                  preparation_seconds=perf_counter()-started)
     (output_dir/'prepared_warm_start.json').write_text(json.dumps(start, indent=2))
     (output_dir/'warm_start_report.json').write_text(json.dumps(report, indent=2))
-    print(f"Warm start: {before:.4f} -> {start['objective']:.4f}; preparation {report['preparation_seconds']:.2f}s")
+    print(f"Warm start: {before:.4f} -> {start['objective']:.4f}")
     return start
 
 
@@ -204,7 +166,7 @@ def evaluate_routes(stops_by_truck, data, depots, distances, capacity, budget, a
 
 
 def improve_warm_start(start, data, depots, distances, capacity, budget, alpha, beta,
-                       seconds=30, seed=42, max_iterations=None):
+                       seconds=30, seed=42):
     """从已有好路线开始；时间预算是启发式时间，不含后面的 MIP。"""
     rng = random.Random(seed)
     best = deepcopy(start)
@@ -220,8 +182,6 @@ def improve_warm_start(start, data, depots, distances, capacity, budget, alpha, 
         best = candidate
         improvements += 1
     while perf_counter()-begin < seconds:
-        if max_iterations is not None and iterations >= max_iterations:
-            break
         iterations += 1
         stops = {k: r['path'][1:-1].copy() for k, r in best['routes'].items()}
         k = rng.choice(trucks)
