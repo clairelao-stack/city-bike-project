@@ -1,106 +1,216 @@
-# City Bike Project
+# Citi Bike Overnight Rebalancing Optimization System (Midtown Manhattan)
 
-Citi Bike 夜间调度：**保留原 MILP 的全部变量、目标函数和约束**，在求解之前独立读取、检查并可选改进初始路线。
+An operational optimization framework developed in Python using **Gurobi** (`gurobipy`) to solve the overnight bike rebalancing problem across 165 stations in Midtown Manhattan. The system integrates historical GBFS feed snapshots, regularized Poisson regression demand forecasting, a fleet-conserving dynamic programming target allocation, Mixed-Integer Linear Programming (MILP) with Miller-Tucker-Zemlin (MTZ) subtour elimination, custom dynamic callback controls for heuristic and search phase stagnation, and geographic route visualization using `matplotlib`, `contextily`, and `pyproj`.
 
-## 文件分工
+---
 
-| 文件 | 作用 |
-|---|---|
-| `run_experiment.py` | 统一设置 warm start 路径、启发式时间、求解时间和结果文件夹 |
-| `warm_start.py` | 读取 JSON、检查路线、保存准备好的方案、设置 Gurobi `.Start` |
-| `heuristic.py` | 可选的简单局部搜索；尝试换顺序、增删站点、调整车辆分工 |
-| `main.py` | 原模型与求解流程，只调用初始方案模块 |
-| `prepare_start.py` | 单独生成并检查初始方案，不启动 Gurobi |
-| `Run_Experiment.ipynb` | Jupyter 运行入口 |
-| `warm_start_83457.json` | 已验证的原模型可行方案，目标值 834.5695 |
-| `model_station_inputs.json` | 固定的 165 站点库存和目标数据 |
-| `selected_depots.json` | 两辆车的固定车库位置 |
+## 1. Project Overview & Key Upgrades
 
-流程：
+This project addresses the overnight Citi Bike rebalancing problem between 14:00 PM and 06:00 AM prior to the morning peak (06:00 AM – 10:00 AM). 
 
-```text
-读取保存的路线 → 可行性检查 → 可选局部搜索 → 再检查 → 设置 .Start → 原模型求解
+### Key Features & Model Refinements
+* **Midtown Scope (14th St to 59th St)**: Comprehensive inclusion of all 165 active stations in Midtown Manhattan without downsampling, selected due to peak activity volume, activity per station, and absolute net flow density across historical trip records.
+* **Effective Dock Capacity ($C_i$)**: Calculated as available bikes + available docks at midnight. Unavailable or damaged bikes/docks are excluded as they cannot recover overnight.
+* **Demand Forecasting & Fleet-Conserving Allocation**: Combines a regularized Poisson regression model for morning pickups ($P_i$) and station-weekday averages for returns ($R_i$). Target inventories ($I_i^*$) are optimized via dynamic programming to minimize replayed blocked trips while strictly preserving total fleet inventory ($\sum_{i} I_i^* = \sum_{i} I_i^0$).
+* **Optimized Depot Locations**: Discrete 2-median facility placement over station coordinates yields dual depot hubs at **Broadway & W 25th St** (Truck 1) and **W 47th St & 6th Ave** (Truck 2).
+* **MTZ Subtour Elimination**: Polynomial Miller-Tucker-Zemlin formulations for exact subtour prevention across multi-stop routing tours.
+* **Dynamic Stagnation Callbacks**: Automated phase transition control to advance out of the No Relaxation (NoRel) heuristic after 50 seconds without objective improvement, and terminate MIP search after 100 seconds without improvement.
+
+---
+
+## 2. Mathematical Model Formulation
+
+### Objective Function
+
+The MILP model minimizes total operational cost, trading off truck travel distance against penalties for station target inventory mismatches:
+
+$$\min \alpha \sum_{k \in \mathcal{K}} \sum_{(i,j) \in \mathcal{A}_k} D_{ij} x_{ijk} + \beta \sum_{i \in \mathcal{I}} u_i$$
+
+### Sets and Parameters
+
+| Notation | Description | Value / Definition |
+| :--- | :--- | :--- |
+| $\mathcal{I}$ | Set of Midtown Manhattan stations | $n = 165$ stations |
+| $\mathcal{K}$ | Fleet of rebalancing trucks | $\|\mathcal{K}\| = 2$ (`Truck_1`, `Truck_2`) |
+| $S_k$ | Starting and ending depot for truck $k$ | Depot 1: $(40.7429^\circ \text{N}, -73.9892^\circ \text{W})$, Depot 2: $(40.7582^\circ \text{N}, -73.9820^\circ \text{W})$ |
+| $\mathcal{V}_k$ | Node set for truck $k$ | $\mathcal{V}_k = \mathcal{I} \cup \{S_k\}$ |
+| $\mathcal{A}_k$ | Feasible directed arcs for truck $k$ | $\mathcal{A}_k = \{(i,j) \mid i, j \in \mathcal{V}_k, i \neq j\}$ |
+| $I_i^0$ | Initial available inventory at midnight | Extracted from GBFS status snapshot |
+| $C_i$ | Effective station dock capacity | Available bikes + available docks at midnight |
+| $I_i^*$ | Target inventory at station $i$ | Prepared via fleet-conserving dynamic programming |
+| $G_i$ | Net required inventory change | $G_i = I_i^* - I_i^0$ ($G_i > 0$ deficit; $G_i < 0$ surplus) |
+| $D_{ij}$ | Grid distance approximation (km) | $D_{ij} = \text{round}\left(84 \cdot \|\text{lon}_i - \text{lon}_j\| + 111 \cdot \|\text{lat}_i - \text{lat}_j\|, 3\right)$ |
+| $Q$ | Maximum truck payload capacity | $Q = 25$ bikes |
+| $W_k$ | Maximum distance allowance per truck | $W_k = 25.0$ km |
+| $\alpha$ | Distance travel cost coefficient | $\$1.50 / \text{km}$ |
+| $\beta$ | Target mismatch penalty coefficient | $\$5.00 / \text{bike}$ shortfall or surplus |
+| $M$ | Load-tracking Big-M constant | $M = 50$ ($M = 2Q$) |
+
+### Decision Variables
+
+* $x_{ijk} \in \{0, 1\}$: Equals 1 if truck $k$ travels directly from node $i$ to node $j$; 0 otherwise.
+* $z_{ik} \in \mathbb{Z}, -Q \le z_{ik} \le Q$: Net bikes delivered to station $i$ by truck $k$ ($z_{ik} < 0$ indicates pickup).
+* $l_{ik} \in [0, Q]$: Load of truck $k$ immediately after visiting station $i$.
+* $y_{ik} \in [0, n]$: MTZ continuous visit-order variable for subtour elimination.
+* $u_i \in \mathbb{R}_{\ge 0}$: Absolute inventory deviation penalty from target stock at station $i$.
+
+---
+
+## 3. Key Constraints Summary
+
+1. **Depot Flow & Single Visit Constraints**:
+   $$\sum_{j \in \mathcal{I}} x_{S_k j k} = \sum_{i \in \mathcal{I}} x_{i S_k k} \le 1, \quad \forall k \in \mathcal{K}$$
+   $$\sum_{j \in \mathcal{V}_k \setminus \{i\}} x_{j i k} = \sum_{j \in \mathcal{V}_k \setminus \{i\}} x_{i j k}, \quad \forall i \in \mathcal{I}, k \in \mathcal{K}$$
+   $$\sum_{k \in \mathcal{K}} \sum_{j \in \mathcal{V}_k \setminus \{i\}} x_{j i k} \le 1, \quad \forall i \in \mathcal{I}$$
+
+2. **Inventory Transfer Limits & Mismatch Tracking**:
+   $$-\min(I_i^0, Q) \sum_{j \in \mathcal{V}_k \setminus \{i\}} x_{j i k} \le z_{ik} \le \min(C_i - I_i^0, Q) \sum_{j \in \mathcal{V}_k \setminus \{i\}} x_{j i k}, \quad \forall i \in \mathcal{I}, k \in \mathcal{K}$$
+   $$u_i \ge G_i - \sum_{k \in \mathcal{K}} z_{ik}, \quad u_i \ge -G_i + \sum_{k \in \mathcal{K}} z_{ik}, \quad \forall i \in \mathcal{I}$$
+
+3. **Truck Load Propagation & Return Conditions**:
+   $$l_{S_k k} = 0, \quad 0 \le l_{ik} \le Q \sum_{j \in \mathcal{V}_k \setminus \{i\}} x_{j i k}, \quad \forall i \in \mathcal{I}, k \in \mathcal{K}$$
+   $$-M(1 - x_{ijk}) \le l_{jk} - l_{ik} + z_{jk} \le M(1 - x_{ijk}), \quad \forall i \in \mathcal{V}_k \setminus \{j\}, j \in \mathcal{I}, k \in \mathcal{K}$$
+   $$l_{ik} \le Q(1 - x_{i S_k k}), \quad \forall i \in \mathcal{I}, k \in \mathcal{K}$$
+   $$\sum_{i \in \mathcal{I}} z_{ik} = 0, \quad \forall k \in \mathcal{K}$$
+
+4. **Distance Budget & Subtour Elimination**:
+   $$\sum_{(i,j) \in \mathcal{A}_k} D_{ij} x_{ijk} \le W_k, \quad \forall k \in \mathcal{K}$$
+   $$0 \le y_{ik} \le n \sum_{j \in \mathcal{V}_k \setminus \{i\}} x_{j i k}, \quad \forall i \in \mathcal{I}, k \in \mathcal{K}$$
+   $$y_{ik} \ge 1 - n(1 - x_{S_k i k}), \quad \forall i \in \mathcal{I}, k \in \mathcal{K}$$
+   $$y_{jk} \ge y_{ik} + 1 - (n+1)(1 - x_{ijk}), \quad \forall i, j \in \mathcal{I}, i \neq j, k \in \mathcal{K}$$
+
+---
+
+## 4. Optimization Control & Stagnation Callback
+
+The solver incorporates a custom dynamic Python callback (`create_stagnation_callback`) to manage search phases and prevent unproductive runtime:
+
+```
+                          ┌────────────────────────┐
+                          │   Start Optimization   │
+                          └───────────┬────────────┘
+                                      │
+                                      ▼
+                        ┌────────────────────────────┐
+                        │   Phase 0: NoRel Heuristic │
+                        └─────────────┬──────────────┘
+                                      │
+                ┌─────────────────────┴─────────────────────┐
+                │                                           │
+       New Best Solution                             No Improvement for
+       Found (< 50s stall)                              50 Seconds
+                │                                           │
+                ▼                                           ▼
+      Reset Stagnation Timer                      model.cbProceed()
+                │                        (Advance to Branch & Cut Search)
+                └─────────────────────┬─────────────────────┘
+                                      │
+                                      ▼
+                        ┌────────────────────────────┐
+                        │ Phase 1 & 2: MIP Search    │
+                        └─────────────┬──────────────┘
+                                      │
+                ┌─────────────────────┴─────────────────────┐
+                │                                           │
+       New Best Solution                             No Improvement for
+       Found (< 100s stall)                             100 Seconds
+                │                                           │
+                ▼                                           ▼
+      Reset Stagnation Timer                       model.terminate()
+                                                (Return Best Incumbent)
 ```
 
-## 最简单的运行方式
+### Stagnation Parameters
+* **No Relaxation Heuristic Stagnation (50s)**: If NoRel (`GRB.Callback.MIP_PHASE == 0`) fails to discover a better integer feasible solution for 50 consecutive seconds, `model.cbProceed()` forces Gurobi to transition into LP relaxation and Branch-and-Cut MIP search immediately.
+* **MIP Search Stagnation (100s)**: If standard MIP search (`GRB.Callback.MIP_PHASE >= 1`) makes no progress on the best incumbent solution for 100 consecutive seconds, `model.terminate()` cleanly stops solver execution and exports the current best incumbent solution.
 
-下载并解压仓库，在项目文件夹中打开 `Run_Experiment.ipynb`，运行唯一的代码单元：
+---
 
-```python
-%run run_experiment.py
+## 5. Setup & Installation
+
+### Step 1: Install Dependencies
+
+Install the required Python environment dependencies:
+
+```bash
+pip install gurobipy contextily pyproj matplotlib pandas requests numpy
 ```
 
-使用已经能运行 Gurobi 的 Python kernel。需要安装依赖时：
+Or via `requirements.txt`:
 
-```python
-%pip install -r requirements.txt
+```bash
+pip install -r requirements.txt
 ```
 
-运行完整 MILP 需要你自己有效的 Gurobi 许可证；本仓库不包含许可证或凭据。
+### Step 2: Configure Gurobi License
 
-## 只需要改这里
+Ensure a valid Gurobi license file (`gurobi.lic`) is located in your user home directory or in the root project folder:
 
-打开 `run_experiment.py`，顶部设置如下：
-
-```python
-WARM_START_FILE = ROOT / 'warm_start_83457.json'
-HEURISTIC_SECONDS = 30
-SOLVER_SECONDS = 600
-OUTPUT_FOLDER = ROOT / ('results_heuristic' if HEURISTIC_SECONDS else 'results_warm_only')
+```bash
+export GRB_LICENSE_FILE=/path/to/gurobi.lic
 ```
 
-- `HEURISTIC_SECONDS = 0`：只使用保存的 warm start，不运行新增局部搜索。
-- `HEURISTIC_SECONDS = 30`：先用最多约 30 秒改进初始路线，再求解原模型。
-- `SOLVER_SECONDS = 600`：原模型最多求解 600 秒；启发式时间另计。
-- 先保持容量 25 辆、每车距离预算 25 km，方便对照。
-- 同一结果目录会被下次运行覆盖；需要保留时修改 `OUTPUT_FOLDER`。
+---
 
-## 单独试启发式，不求解模型
+## 6. Running the Solver & CLI Usage
 
-```python
-%run prepare_start.py --seconds 30
+Run the optimization pipeline using `main.py`. The script provides command-line flags to adjust execution time limits, truck capacity, max distance allowances, and objective penalties.
+
+```bash
+python main.py [OPTIONS]
 ```
 
-结果在 `prepared_start/`。把 `run_experiment.py` 中的 `WARM_START_FILE` 改为
-`ROOT / 'prepared_start' / 'prepared_warm_start.json'`，并将 `HEURISTIC_SECONDS` 设为 0，
-即可把单独准备好的方案交给原模型。
+### Supported CLI Flags
 
-也可以直接运行：
+| Parameter Flag | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `-p`, `--time-limit` | `float` | `600.0` | Maximum solver time limit in seconds. |
+| `-Q`, `--truck-capacity` | `int` | `25` | Maximum bike payload per truck ($Q$). |
+| `-w`, `--max-distance` | `float` | `25.0` | Travel distance limit per truck in kilometers ($W_k$). |
+| `-a`, `--alpha` | `float` | `1.5` | Travel cost per kilometer ($\alpha$). |
+| `-b`, `--beta` | `float` | `5.0` | Inventory mismatch penalty per bike ($\beta$). |
 
-```python
-%run main.py --warm-start prepared_start/prepared_warm_start.json --output-dir results_prepared -p 600
-```
+### Execution Examples
 
-## 新增启发式是什么？
+* **Solve Midtown Model (1500s overall time limit backstop):**
+  ```bash
+  python main.py -p 1500
+  ```
 
-这是简单局部搜索，**不是 Clarke–Wright**。它从已有好路线出发，随机尝试移动或交换站点、反转部分访问顺序、加入或删除站点，以及插入先取后送的站点对。每个候选访问顺序都重新生成取送量，检查容量和距离；只接受目标值更低的可行方案。
+* **Custom Payload and Travel Allowances:**
+  ```bash
+  python main.py -p 1200 -Q 30 -w 30.0 -a 2.0 -b 6.0
+  ```
 
-启发式只构造朝库存目标调整的候选方案；这条选择规则**没有加入原 MIP 的约束**。原 MIP 仍保留原来允许的全部取送选择、MTZ、Big-M 载重传递、全路段和每站最多访问一次等限制。局部搜索不保证找到全局最优，也不保证有明显改善。
+---
 
-## 查看结果
+## 7. Empirical Results & Benchmark Performance
 
-| 输出 | 内容 |
-|---|---|
-| `prepared_warm_start.json` | 实际交给原模型的初始方案 |
-| `warm_start_report.json` | 初始/改进后的成本、启发式耗时和验证状态 |
-| `gurobi.log` | 求解日志，检查是否出现 `Loaded user MIP start` |
-| `solution.json` | 原模型最终找到的可行方案、下界和 gap |
-| `route_steps.csv` | 访问顺序、每站取送量、车上余量 |
-| `summary.csv` | 成本、库存偏差和里程汇总 |
-| `validation_checks.csv` | 原有验证结果 |
-| `routes.png` | 路线图；街道底图需要网络 |
+Evaluating the MILP model on the 165-station Midtown dataset demonstrates significant reductions in target inventory mismatches:
 
-原模型使用 600 秒默认上限和原来的求解停止容差；没有额外设置 50% 的 gap 阈值。
-Warm start 和启发式不保证降低最终 gap。比较时同时报告启发式/准备时间与 MIP 时间、目标值、下界和 gap。
+| Metric | Baseline (No Rebalancing) | Gurobi MILP | Absolute Change | % Improvement |
+| :--- | :---: | :---: | :---: | :---: |
+| **Abs. Inventory Mismatch** | $884\text{ bikes}$ | **$228\text{ bikes}$** | $-656\text{ bikes}$ | **$-74.2\%$** |
+| **Approx. Total Travel Distance** | $0.000\text{ km}$ | **$49.445\text{ km}$** | $+49.445\text{ km}$ | N/A |
+| **Travel Cost Term** ($\alpha = 1.5$) | $0.0000$ | **$74.1675$** | $+74.1675$ | N/A |
+| **Mismatch Penalty Term** ($\beta = 5.0$) | $4,420.0000$ | **$1,140.0000$** | $-3,280.0000$ | **$-74.2\%$** |
+| **Total Objective Value** | **$4,420.0000$** | **$1,214.1675$** | **$-3,205.8325$** | **$-72.5\%$** |
 
-## 已做验证
+### Vehicle Performance Summary
 
-- 原模型的变量、目标函数和约束代码与用户提供的原版逐字对比一致。
-- 保存的 834.5695 方案通过独立库存、载重、访问和距离重放检查。
-- 165 站点短局部搜索：初始成本由 834.5695 小幅降到 834.4510，方案通过检查。
-- 使用 2 秒启发式和 10 秒原 MIP 做过集成验证，Gurobi 接收了 834.4510 的 warm start，原有 12 类验证全部通过。
-- 以上是短验证，**不是默认 30 秒启发式＋600 秒求解的性能结论**。计时停止可能使相同种子得到略不同结果。
+| Truck ID | Depot Location | Coordinates | Stops Made | Total Dist. (km) | Budget Used | Bikes Picked Up / Delivered |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| **Truck 1** | Broadway & W 25 St | $(40.7429, -73.9892)$ | $51$ | $24.632\text{ km}$ | $98.5\%$ | $197\text{ bikes}$ |
+| **Truck 2** | W 47 St & 6 Ave | $(40.7582, -73.9820)$ | $46$ | $24.813\text{ km}$ | $99.3\%$ | $132\text{ bikes}$ |
+| **Total** | — | — | **$97$** | **$49.445\text{ km}$** | — | **$329\text{ bikes}$** |
 
-输入和初始方案沿用项目已有固定数据；没有随仓库重新分发原始骑行档案、许可证或本机日志。
+> **Key Operational Finding:** Distance allowance $W_k = 25.0\text{ km}$ acts as the binding constraint limiting further mismatch reduction, rather than instantaneous vehicle payload capacity $Q$.
 
-本仓库先作为实验代码存放，不提供额外开源许可证；依赖软件的许可证保持各自条款。
+---
+
+## 8. Operational Limitations & Future Extensions
+
+1. **Street-Network Routing & Travel Time Constraints**:
+   Current distances rely on Manhattan grid projections ($D_{ij}$). Integrating real-world street network directions (e.g., OpenStreetMap / OSRM) and travel/service time estimates will improve route schedule fidelity before the 06:00 AM cutoff.
+2. **Dynamic Intra-Day Rebalancing**:
+   The current framework optimizes static overnight rebalancing. Future work involves extending the formulation into a multi-period dynamic MIP that accounts for real-time customer trip activity during operational hours.
